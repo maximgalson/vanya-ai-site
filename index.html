@@ -142,9 +142,16 @@
             margin-bottom: 16px;
         }
         .gradient { 
-            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover), #fff, var(--accent));
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: shimmer 4s ease infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         .subtitle {
             font-size: 18px;
@@ -241,6 +248,7 @@
             font-size: 36px;
             font-weight: 800;
             color: var(--accent);
+            text-shadow: 0 0 20px rgba(236,176,10,0.3);
         }
         .speed-item .label {
             font-size: 13px;
@@ -255,9 +263,26 @@
         }
         .cta-box {
             background: var(--card);
-            border: 2px solid rgba(236,176,10,0.4);
             border-radius: 20px;
             padding: 40px;
+            position: relative;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, var(--accent), transparent, var(--accent), transparent);
+            background-size: 400% 400%;
+            animation: border-glow 3s ease infinite;
+            z-index: -1;
+        }
+        @keyframes border-glow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         .cta-box h2 { font-size: 28px; margin-bottom: 12px; }
         .cta-box p { color: var(--muted); margin-bottom: 24px; }
@@ -277,6 +302,19 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(236,176,10,0.3);
         }
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 16px;
+            background: var(--accent);
+            opacity: 0;
+            filter: blur(16px);
+            z-index: -1;
+            transition: opacity 0.3s;
+        }
+        .btn { position: relative; }
+        .btn:hover::after { opacity: 0.4; }
         .btn-secondary {
             display: inline-block;
             color: var(--accent);
@@ -544,6 +582,38 @@
 </footer>
 
 <script>
+// Mouse glow
+const glow = document.createElement('div');
+glow.style.cssText = 'position:fixed;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(236,176,10,0.06),transparent 70%);pointer-events:none;z-index:0;transition:transform 0.15s ease;';
+document.body.appendChild(glow);
+document.addEventListener('mousemove', e => {
+    glow.style.transform = `translate(${e.clientX - 150}px, ${e.clientY - 150}px)`;
+});
+
+// Animated counters
+function animateCount(el, target, suffix) {
+    let current = 0;
+    const step = target / 30;
+    const timer = setInterval(() => {
+        current += step;
+        if (current >= target) { current = target; clearInterval(timer); }
+        el.textContent = Math.round(current) + suffix;
+    }, 40);
+}
+const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && !entry.target.dataset.counted) {
+            entry.target.dataset.counted = 'true';
+            const items = entry.target.querySelectorAll('.speed-item');
+            animateCount(items[0].querySelector('.number'), 30, '');
+            animateCount(items[1].querySelector('.number'), 2, 'ч');
+            animateCount(items[2].querySelector('.number'), 1, 'ч');
+        }
+    });
+}, { threshold: 0.3 });
+document.querySelectorAll('.speed').forEach(el => counterObserver.observe(el));
+
+// Scroll reveal
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
