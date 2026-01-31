@@ -220,6 +220,22 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 20px;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+        .step:hover {
+            border-color: rgba(236,176,10,0.5);
+            background: linear-gradient(135deg, rgba(236,176,10,0.05), rgba(236,176,10,0.02));
+            transform: translateX(8px);
+            box-shadow: 0 4px 20px rgba(236,176,10,0.1);
+        }
+        .step:hover .step-num {
+            background: rgba(236,176,10,0.2);
+            border-color: var(--accent);
+            transform: scale(1.1);
+        }
+        .step:hover h4 {
+            color: var(--accent);
         }
         .step-num {
             flex-shrink: 0;
@@ -233,7 +249,9 @@
             font-weight: 700;
             font-size: 14px;
             color: var(--accent);
+            transition: all 0.3s ease;
         }
+        .step h4 { transition: color 0.3s ease; }
         .step h4 { font-size: 16px; margin-bottom: 4px; }
         .step p { font-size: 14px; color: var(--muted); }
 
