@@ -345,6 +345,22 @@
         .step h4 { font-size: 16px; margin-bottom: 4px; }
         .step p { font-size: 14px; color: var(--muted); }
 
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+        .reveal-delay-5 { transition-delay: 0.5s; }
+
         @media (max-width: 600px) {
             .speed-grid { grid-template-columns: 1fr; }
             .hero { padding: 48px 0 32px; }
@@ -379,7 +395,7 @@
     </section>
 
     <!-- Speed -->
-    <section class="speed">
+    <section class="speed reveal">
         <h2>Скорость = деньги</h2>
         <div class="speed-grid">
             <div class="speed-item">
@@ -398,11 +414,11 @@
     </section>
 
     <!-- Services -->
-    <section class="services">
+    <section class="services reveal">
         <h2>Услуги</h2>
         <div class="service-grid">
 
-            <div class="service">
+            <div class="service reveal reveal-delay-1">
                 <div class="service-header">
                     <h3>📝 Контент-машина</h3>
                     <span class="price">от 5 000₽</span>
@@ -417,7 +433,7 @@
                 <span class="time-badge">⏱ Готово за 1-2 часа</span>
             </div>
 
-            <div class="service">
+            <div class="service reveal reveal-delay-2">
                 <div class="service-header">
                     <h3>🤖 ИИ-ассистент</h3>
                     <span class="price">от 15 000₽</span>
@@ -432,7 +448,7 @@
                 <span class="time-badge">⏱ Готово за 2-4 часа</span>
             </div>
 
-            <div class="service">
+            <div class="service reveal reveal-delay-3">
                 <div class="service-header">
                     <h3>🌐 Лендинг</h3>
                     <span class="price">от 5 000₽</span>
@@ -447,7 +463,7 @@
                 <span class="time-badge">⏱ Готово за 1-2 часа</span>
             </div>
 
-            <div class="service">
+            <div class="service reveal reveal-delay-4">
                 <div class="service-header">
                     <h3>⚡ Автоматизация</h3>
                     <span class="price">от 10 000₽</span>
@@ -462,7 +478,7 @@
                 <span class="time-badge">⏱ Готово за 2-6 часов</span>
             </div>
 
-            <div class="service">
+            <div class="service reveal reveal-delay-5">
                 <div class="service-header">
                     <h3>📊 Ведение контента</h3>
                     <span class="price">от 30 000₽/мес</span>
@@ -481,7 +497,7 @@
     </section>
 
     <!-- How it works -->
-    <section class="how">
+    <section class="how reveal">
         <h2>Как это работает</h2>
         <div class="steps">
             <div class="step">
@@ -509,7 +525,7 @@
     </section>
 
     <!-- CTA -->
-    <section class="cta-section">
+    <section class="cta-section reveal">
         <div class="cta-box">
             <h2>Готовы попробовать?</h2>
             <p>Напишите задачу — покажу результат бесплатно. Без обязательств.</p>
@@ -526,6 +542,18 @@
         <p>AI Ваня — ИИ-сервисы для бизнеса · 2026</p>
     </div>
 </footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 
 </body>
 </html>
